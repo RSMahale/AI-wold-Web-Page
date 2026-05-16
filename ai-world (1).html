@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI World — The Future Is Now</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #03020a;
+    --surface: #0d0b1a;
+    --card: #12101f;
+    --border: rgba(255,255,255,0.07);
+    --accent1: #7c3aed;
+    --accent2: #06b6d4;
+    --accent3: #f59e0b;
+    --accent4: #ec4899;
+    --text: #f0eeff;
+    --muted: #8b82b0;
+    --glow1: rgba(124,58,237,0.35);
+    --glow2: rgba(6,182,212,0.25);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; overflow-x:hidden; }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, var(--glow1), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, var(--glow2), transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(236,72,153,0.1), transparent 70%);
+    pointer-events:none; z-index:0;
+  }
+
+  /* NAV */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 60px;
+    backdrop-filter:blur(20px);
+    background:rgba(3,2,10,0.65);
+    border-bottom:1px solid var(--border);
+  }
+  .logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; background:linear-gradient(135deg,var(--accent1),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .nav-links { display:flex; gap:28px; list-style:none; }
+  .nav-links a { color:var(--muted); text-decoration:none; font-size:0.84rem; font-weight:500; transition:color 0.25s; }
+  .nav-links a:hover { color:var(--text); }
+
+  section { position:relative; z-index:1; }
+
+  /* HERO */
+  #hero { min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:120px 40px 80px; }
+  .hero-inner { max-width:860px; }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.4);
+    border-radius:999px; padding:6px 18px;
+    font-size:0.78rem; font-weight:600; color:#a78bfa;
+    letter-spacing:1.5px; text-transform:uppercase;
+    margin-bottom:32px; animation:fadeUp 0.8s ease both;
+  }
+  .hero-badge .dot { width:7px; height:7px; border-radius:50%; background:#7c3aed; box-shadow:0 0 8px #7c3aed; animation:blink 1.5s infinite; }
+  @keyframes blink{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
+  h1 { font-family:'Syne',sans-serif; font-size:clamp(2.8rem,8vw,6rem); font-weight:800; line-height:1.05; letter-spacing:-2px; animation:fadeUp 0.9s 0.1s ease both; }
+  h1 .grad { display:block; background:linear-gradient(90deg,var(--accent2),var(--accent1),var(--accent4)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .hero-sub { font-size:1.1rem; color:var(--muted); max-width:540px; margin:24px auto 44px; line-height:1.7; font-weight:300; animation:fadeUp 1s 0.2s ease both; }
+  .btn-group { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; animation:fadeUp 1s 0.3s ease both; }
+  .btn { display:inline-block; padding:14px 32px; border-radius:12px; font-weight:600; font-size:0.95rem; text-decoration:none; transition:all 0.25s; cursor:pointer; border:none; font-family:'DM Sans',sans-serif; }
+  .btn-primary { background:linear-gradient(135deg,var(--accent1),#5b21b6); color:#fff; box-shadow:0 0 30px rgba(124,58,237,0.4); }
+  .btn-primary:hover { transform:translateY(-3px); box-shadow:0 0 50px rgba(124,58,237,0.6); }
+  .btn-outline { background:transparent; color:var(--text); border:1px solid var(--border); }
+  .btn-outline:hover { border-color:rgba(255,255,255,0.2); transform:translateY(-3px); }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ════ HIGHLIGHTED HERO IMAGE STRIP ════ */
+  .hero-imgs { display:flex; gap:16px; justify-content:center; margin-top:64px; animation:fadeUp 1.1s 0.5s ease both; flex-wrap:wrap; }
+  .hero-img-card {
+    width:188px; height:120px; border-radius:18px; overflow:hidden; position:relative;
+    cursor:pointer; transition:transform 0.4s, box-shadow 0.4s;
+    box-shadow: 0 0 0 2.5px rgba(124,58,237,0.6), 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .hero-img-card:hover {
+    transform:translateY(-12px) scale(1.06);
+    box-shadow: 0 0 0 2.5px var(--accent2), 0 24px 60px rgba(6,182,212,0.4), 0 0 40px rgba(124,58,237,0.3);
+  }
+  .hero-img-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+  .hero-img-card:hover img { transform:scale(1.12); }
+  .hero-img-card::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,0.2) 50%,transparent 70%);
+    transform:translateX(-100%); transition:transform 0.55s; pointer-events:none;
+  }
+  .hero-img-card:hover::after { transform:translateX(100%); }
+  .hero-img-card .label { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,0.88)); font-size:0.72rem; font-weight:700; color:#fff; padding:10px 10px 7px; letter-spacing:0.5px; }
+  /* purple corner glow overlay */
+  .hero-img-card .glow-corner { position:absolute; top:-20px; right:-20px; width:60px; height:60px; border-radius:50%; background:radial-gradient(var(--accent1),transparent 70%); opacity:0.5; pointer-events:none; }
+
+  /* SECTION TITLES */
+  .sec-title { font-family:'Syne',sans-serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:800; letter-spacing:-1px; margin-bottom:12px; }
+  .sec-sub { color:var(--muted); font-size:1rem; font-weight:300; margin-bottom:48px; line-height:1.7; }
+
+  /* WHAT IS AI */
+  #what { padding:100px 60px; max-width:1200px; margin:0 auto; }
+  .what-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+
+  /* ════ HIGHLIGHTED LARGE IMAGE ════ */
+  .what-img {
+    border-radius:24px; overflow:hidden; position:relative; cursor:pointer;
+    transition:transform 0.4s, box-shadow 0.4s;
+    box-shadow:
+      0 0 0 3px rgba(124,58,237,0.65),
+      0 0 50px rgba(124,58,237,0.25),
+      0 0 100px rgba(6,182,212,0.12);
+  }
+  .what-img:hover {
+    transform:scale(1.025);
+    box-shadow:
+      0 0 0 3px var(--accent2),
+      0 0 70px rgba(6,182,212,0.45),
+      0 0 120px rgba(124,58,237,0.2);
+  }
+  .what-img img { width:100%; display:block; transition:transform 0.5s; }
+  .what-img:hover img { transform:scale(1.05); }
+  .what-img .img-caption { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(3,2,10,0.9)); padding:24px 20px 14px; font-size:0.78rem; color:rgba(255,255,255,0.55); }
+  .what-img .zoom-hint { position:absolute; top:14px; right:14px; background:rgba(0,0,0,0.5); backdrop-filter:blur(6px); border-radius:8px; padding:4px 10px; font-size:0.72rem; color:rgba(255,255,255,0.7); }
+
+  .what-text p { color:var(--muted); line-height:1.8; margin-bottom:16px; font-weight:300; }
+  .stat-row { display:flex; gap:20px; margin-top:36px; flex-wrap:wrap; }
+  .stat-box { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:20px 24px; flex:1; min-width:110px; }
+  .stat-box .num { font-family:'Syne',sans-serif; font-size:1.9rem; font-weight:800; background:linear-gradient(90deg,var(--accent2),var(--accent1)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .stat-box .lab { font-size:0.78rem; color:var(--muted); font-weight:500; margin-top:4px; }
+
+  /* ════ UPLOAD SECTION STYLES ════ */
+  .upload-zone {
+    padding:70px 60px;
+    max-width:1200px; margin:0 auto;
+  }
+  .upload-zone.dark { background:var(--surface); max-width:100%; padding:70px 0; }
+  .upload-zone.dark .inner { max-width:1200px; margin:0 auto; padding:0 60px; }
+
+  .upload-banner {
+    display:flex; align-items:center; gap:16px;
+    background:rgba(124,58,237,0.08);
+    border:1px solid rgba(124,58,237,0.25);
+    border-radius:16px; padding:18px 24px;
+    margin-bottom:28px;
+  }
+  .upload-banner .ub-icon { font-size:1.8rem; }
+  .upload-banner h3 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:3px; }
+  .upload-banner p { color:var(--muted); font-size:0.82rem; }
+
+  .slot-grid {
+    display:grid; gap:22px;
+    grid-template-columns:repeat(3,1fr);
+  }
+  .slot-grid.two { grid-template-columns:repeat(2,1fr); }
+  .slot-grid.six { grid-template-columns:repeat(3,1fr); }
+
+  .upload-slot {
+    border-radius:20px;
+    border:2px dashed rgba(124,58,237,0.35);
+    background:rgba(124,58,237,0.04);
+    min-height:210px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    cursor:pointer; transition:all 0.3s; position:relative; overflow:hidden;
+    text-align:center; padding:24px;
+  }
+  .upload-slot:hover:not(.has-img) {
+    border-color:var(--accent2);
+    background:rgba(6,182,212,0.06);
+    transform:translateY(-4px);
+    box-shadow:0 12px 40px rgba(6,182,212,0.12);
+  }
+  .upload-slot.has-img {
+    border:none; padding:0;
+    box-shadow: 0 0 0 2.5px rgba(124,58,237,0.5), 0 10px 40px rgba(0,0,0,0.4);
+  }
+  .upload-slot.has-img:hover {
+    box-shadow: 0 0 0 2.5px var(--accent2), 0 20px 60px rgba(6,182,212,0.35);
+    transform:translateY(-6px) scale(1.02);
+  }
+  .upload-slot input[type="file"] { display:none; }
+  .u-icon { font-size:2.4rem; margin-bottom:12px; }
+  .u-label { font-size:0.9rem; font-weight:600; color:var(--text); }
+  .u-hint { font-size:0.75rem; color:var(--muted); margin-top:6px; }
+  .slot-img { width:100%; height:100%; min-height:210px; object-fit:cover; display:block; border-radius:18px; }
+
+  /* hover overlay on filled slot */
+  .slot-ov {
+    position:absolute; inset:0; border-radius:18px;
+    background:linear-gradient(to top,rgba(0,0,0,0.88) 0%,transparent 55%);
+    opacity:0; transition:opacity 0.3s;
+    display:flex; flex-direction:column; justify-content:space-between; padding:14px;
+  }
+  .upload-slot.has-img:hover .slot-ov { opacity:1; }
+  .slot-ov .chg-btn {
+    align-self:flex-end;
+    background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
+    border-radius:8px; padding:6px 14px; font-size:0.75rem; color:#fff; cursor:pointer;
+    backdrop-filter:blur(6px); font-family:'DM Sans',sans-serif; transition:background 0.2s;
+  }
+  .slot-ov .chg-btn:hover { background:rgba(255,255,255,0.24); }
+  .slot-ov .cap-inp {
+    background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.18);
+    border-radius:8px; padding:7px 12px; font-size:0.78rem; color:#fff;
+    font-family:'DM Sans',sans-serif; width:100%; outline:none;
+  }
+  .upload-tip {
+    display:flex; align-items:center; gap:10px; margin-top:16px;
+    background:rgba(6,182,212,0.07); border:1px solid rgba(6,182,212,0.18);
+    border-radius:12px; padding:12px 18px; font-size:0.82rem; color:var(--muted);
+  }
+
+  /* ════ HIGHLIGHTED USE-CASE IMAGES ════ */
+  #usecases { padding:100px 60px; }
+  #usecases .inner { max-width:1200px; margin:0 auto; }
+  .use-row { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:24px; }
+
+  .use-card {
+    border-radius:20px; overflow:hidden; position:relative; height:265px; cursor:pointer;
+    transition:transform 0.4s, box-shadow 0.4s;
+    box-shadow: 0 0 0 2px rgba(124,58,237,0.35), 0 10px 40px rgba(0,0,0,0.5);
+  }
+  .use-card:hover {
+    transform:scale(1.04) translateY(-7px);
+    box-shadow: 0 0 0 2.5px var(--accent2), 0 28px 70px rgba(6,182,212,0.35);
+  }
+  .use-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.55s; }
+  .use-card:hover img { transform:scale(1.1); }
+  .use-card::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,0.13) 50%,transparent 70%);
+    transform:translateX(-100%); transition:transform 0.6s; pointer-events:none;
+  }
+  .use-card:hover::after { transform:translateX(100%); }
+  .use-card .ov { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,0.9) 0%,transparent 55%); display:flex; flex-direction:column; justify-content:flex-end; padding:22px; }
+  .use-card .ov h3 { font-family:'Syne',sans-serif; font-weight:700; font-size:1.05rem; margin-bottom:4px; }
+  .use-card .ov p { font-size:0.79rem; color:rgba(255,255,255,0.62); font-weight:300; }
+
+  /* ADVANTAGES */
+  #advantages { padding:100px 60px; background:var(--surface); }
+  #advantages .inner { max-width:1200px; margin:0 auto; }
+  .adv-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .adv-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:32px 28px; transition:all 0.3s; position:relative; overflow:hidden; }
+  .adv-card::before { content:''; position:absolute; top:-40px; right:-40px; width:100px; height:100px; border-radius:50%; opacity:0; transition:opacity 0.3s; }
+  .adv-card:hover { transform:translateY(-6px); border-color:rgba(255,255,255,0.14); }
+  .adv-card:hover::before { opacity:1; }
+  .adv-card.c1::before{background:radial-gradient(var(--accent1),transparent);}
+  .adv-card.c2::before{background:radial-gradient(var(--accent2),transparent);}
+  .adv-card.c3::before{background:radial-gradient(var(--accent3),transparent);}
+  .adv-card.c4::before{background:radial-gradient(var(--accent4),transparent);}
+  .adv-card.c5::before{background:radial-gradient(#10b981,transparent);}
+  .adv-card.c6::before{background:radial-gradient(var(--accent1),transparent);}
+  .adv-icon { font-size:2.2rem; margin-bottom:18px; display:block; }
+  .adv-card h3 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:10px; }
+  .adv-card p { color:var(--muted); font-size:0.88rem; line-height:1.7; font-weight:300; }
+
+  /* DISADVANTAGES */
+  #disadvantages { padding:100px 60px; }
+  #disadvantages .inner { max-width:1200px; margin:0 auto; }
+  .dis-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:24px; }
+  .dis-card { background:var(--card); border:1px solid rgba(239,68,68,0.15); border-radius:20px; padding:32px 28px; display:flex; gap:20px; transition:all 0.3s; }
+  .dis-card:hover { transform:translateY(-4px); border-color:rgba(239,68,68,0.3); }
+  .dis-num { font-family:'Syne',sans-serif; font-size:2.5rem; font-weight:800; color:rgba(239,68,68,0.22); line-height:1; min-width:50px; }
+  .dis-body h3 { font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:700; margin-bottom:8px; color:#fca5a5; }
+  .dis-body p { color:var(--muted); font-size:0.87rem; line-height:1.7; font-weight:300; }
+
+  /* TYPES */
+  #types { padding:100px 60px; background:var(--surface); }
+  #types .inner { max-width:1200px; margin:0 auto; }
+  .types-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  .type-card { border-radius:20px; padding:32px 24px; text-align:center; border:1px solid var(--border); transition:transform 0.3s; overflow:hidden; }
+  .type-card:hover { transform:translateY(-6px); }
+  .type-card.t1{background:linear-gradient(145deg,#1a0533,#0d0b1a);}
+  .type-card.t2{background:linear-gradient(145deg,#001f2e,#0d0b1a);}
+  .type-card.t3{background:linear-gradient(145deg,#1f1200,#0d0b1a);}
+  .type-card.t4{background:linear-gradient(145deg,#1a0a1a,#0d0b1a);}
+  .type-icon { font-size:2.8rem; margin-bottom:16px; display:block; }
+  .type-card h3 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; margin-bottom:10px; }
+  .type-card p { color:var(--muted); font-size:0.82rem; line-height:1.65; font-weight:300; }
+
+  /* FUTURE */
+  #future { padding:100px 60px; background:var(--surface); }
+  #future .inner { max-width:1000px; margin:0 auto; }
+  .timeline { display:flex; flex-direction:column; position:relative; text-align:left; margin-top:52px; }
+  .timeline::before { content:''; position:absolute; left:24px; top:0; bottom:0; width:2px; background:linear-gradient(to bottom,var(--accent1),var(--accent2),var(--accent4)); }
+  .tl-item { display:flex; gap:36px; padding:28px 0; align-items:flex-start; }
+  .tl-dot { width:50px; height:50px; min-width:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem; position:relative; z-index:1; }
+  .tl-dot.d1{background:rgba(124,58,237,0.25);border:2px solid var(--accent1);}
+  .tl-dot.d2{background:rgba(6,182,212,0.25);border:2px solid var(--accent2);}
+  .tl-dot.d3{background:rgba(245,158,11,0.25);border:2px solid var(--accent3);}
+  .tl-dot.d4{background:rgba(236,72,153,0.25);border:2px solid var(--accent4);}
+  .tl-body h3 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:6px; }
+  .tl-body p { color:var(--muted); font-size:0.88rem; line-height:1.7; font-weight:300; }
+  .tl-year { font-size:0.75rem; font-weight:600; letter-spacing:1px; color:var(--accent2); margin-bottom:4px; text-transform:uppercase; }
+
+  /* LIGHTBOX */
+  #lightbox {
+    display:none; position:fixed; inset:0; z-index:999;
+    background:rgba(0,0,0,0.93); backdrop-filter:blur(20px);
+    align-items:center; justify-content:center; flex-direction:column; gap:16px;
+  }
+  #lightbox.open { display:flex; }
+  #lb-img { max-width:88vw; max-height:80vh; border-radius:18px; box-shadow:0 0 0 3px rgba(124,58,237,0.6), 0 0 80px rgba(124,58,237,0.4); animation:lbIn 0.3s ease; }
+  @keyframes lbIn{from{opacity:0;transform:scale(0.92);}to{opacity:1;transform:scale(1);}}
+  #lb-cap { color:rgba(255,255,255,0.65); font-size:0.9rem; }
+  #lb-close { position:absolute; top:24px; right:28px; background:rgba(255,255,255,0.1); border:none; border-radius:50%; width:42px; height:42px; font-size:1.2rem; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.2s; }
+  #lb-close:hover { background:rgba(255,255,255,0.22); }
+
+  /* TOAST */
+  .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(80px); background:rgba(6,182,212,0.13); border:1px solid rgba(6,182,212,0.4); backdrop-filter:blur(12px); border-radius:12px; padding:12px 24px; font-size:0.85rem; color:var(--accent2); z-index:200; transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1); pointer-events:none; }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+
+  /* FOOTER */
+  footer { padding:48px 60px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; position:relative; z-index:1; }
+  footer p { color:var(--muted); font-size:0.82rem; }
+
+  /* REVEAL */
+  .reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s ease,transform 0.7s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    nav { padding:16px 24px; }
+    .nav-links { display:none; }
+    #what,.upload-zone,#advantages,#disadvantages,#types,#usecases,#future { padding:70px 24px; }
+    .what-grid { grid-template-columns:1fr; }
+    .adv-grid { grid-template-columns:1fr 1fr; }
+    .dis-grid { grid-template-columns:1fr; }
+    .types-grid { grid-template-columns:1fr 1fr; }
+    .use-row { grid-template-columns:1fr; }
+    .slot-grid,.slot-grid.two,.slot-grid.six { grid-template-columns:1fr; }
+    footer { flex-direction:column; gap:16px; text-align:center; padding:40px 24px; }
+    .hero-img-card { width:144px; height:96px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button id="lb-close">✕</button>
+  <img id="lb-img" src="" alt="">
+  <div id="lb-cap"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ──────────── NAV ──────────── -->
+<nav>
+  <div class="logo">⚡ AI World</div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#what">About</a></li>
+    <li><a href="#my-gallery">📷 Gallery</a></li>
+    <li><a href="#advantages">Advantages</a></li>
+    <li><a href="#disadvantages">Risks</a></li>
+    <li><a href="#usecases">Use Cases</a></li>
+    <li><a href="#future">Future</a></li>
+  </ul>
+</nav>
+
+<!-- ──────────── HERO ──────────── -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="dot"></span> Artificial Intelligence 2025</div>
+    <h1>The Era of<br><span class="grad">Artificial Intelligence</span></h1>
+    <p class="hero-sub">Explore how AI is transforming every aspect of human life — from healthcare to creativity, education to space exploration.</p>
+    <div class="btn-group">
+      <a href="#what" class="btn btn-primary">Explore AI →</a>
+      <a href="#my-gallery" class="btn btn-outline">📷 Add Your Images</a>
+    </div>
+
+    <!-- HIGHLIGHTED HERO IMAGES (glowing border + shine + zoom) -->
+    <div class="hero-imgs">
+      <div class="hero-img-card" onclick="openLightbox(this.querySelector('img').src,'Neural Networks')">
+        <div class="glow-corner"></div>
+        <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=400&q=80" alt="Neural Networks">
+        <div class="label">Neural Networks</div>
+      </div>
+      <div class="hero-img-card" onclick="openLightbox(this.querySelector('img').src,'Robotics')">
+        <div class="glow-corner"></div>
+        <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&q=80" alt="Robotics">
+        <div class="label">Robotics</div>
+      </div>
+      <div class="hero-img-card" onclick="openLightbox(this.querySelector('img').src,'Deep Learning')">
+        <div class="glow-corner"></div>
+        <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=400&q=80" alt="Deep Learning">
+        <div class="label">Deep Learning</div>
+      </div>
+      <div class="hero-img-card" onclick="openLightbox(this.querySelector('img').src,'AI in Medicine')">
+        <div class="glow-corner"></div>
+        <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80" alt="AI Medicine">
+        <div class="label">AI in Medicine</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── WHAT IS AI ──────────── -->
+<section id="what">
+  <div class="what-grid reveal">
+    <!-- HIGHLIGHTED large image -->
+    <div class="what-img" onclick="openLightbox(this.querySelector('img').src,'Artificial Intelligence Visualization')">
+      <img src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=700&q=80" alt="What is AI">
+      <div class="zoom-hint">🔍 Click to zoom</div>
+      <div class="img-caption">Visualization of AI neural processing · Unsplash</div>
+    </div>
+    <div class="what-text">
+      <div class="sec-title">What is Artificial Intelligence?</div>
+      <p>AI is the simulation of human intelligence in machines — enabling them to think, learn, and solve problems. From Siri to self-driving cars and ChatGPT, AI is already woven into daily life.</p>
+      <p>It encompasses Machine Learning, Deep Learning, Natural Language Processing (NLP), Computer Vision, and Robotics working together to build smarter systems.</p>
+      <div class="stat-row">
+        <div class="stat-box"><div class="num">$1.8T</div><div class="lab">AI Market by 2030</div></div>
+        <div class="stat-box"><div class="num">97M</div><div class="lab">New AI Jobs</div></div>
+        <div class="stat-box"><div class="num">85%</div><div class="lab">Companies Use AI</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     📷 MY IMAGE GALLERY — INSERT YOUR IMAGES
+══════════════════════════════════════════ -->
+<section id="my-gallery" style="background:var(--surface);padding:90px 0;position:relative;z-index:1;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 60px;">
+    <div class="reveal">
+      <div class="sec-title">📷 My AI Image Gallery</div>
+      <p class="sec-sub">Upload your own images below — click any slot to choose a file from your device. Hover to add captions or swap images. Click any uploaded image to view it full-screen.</p>
+    </div>
+    <div class="upload-banner reveal">
+      <span class="ub-icon">🖼️</span>
+      <div>
+        <h3>Insert Your Images Here</h3>
+        <p>Supports JPG, PNG, WEBP, GIF · Images stay private in your browser session</p>
+      </div>
+    </div>
+    <div class="slot-grid six reveal" id="main-gallery"></div>
+    <div class="upload-tip reveal">💡 Tip: After uploading, hover the image to change it or type a caption. Click the image to open it in full-screen view.</div>
+  </div>
+</section>
+
+<!-- ──────────── ADVANTAGES ──────────── -->
+<section id="advantages">
+  <div class="inner">
+    <div class="sec-title reveal">✅ Advantages of AI</div>
+    <p class="sec-sub reveal">Why AI is changing the world for the better</p>
+    <div class="adv-grid">
+      <div class="adv-card c1 reveal"><span class="adv-icon">⚡</span><h3>Automation & Speed</h3><p>AI performs repetitive tasks 24/7 without fatigue, dramatically increasing efficiency in manufacturing, data entry, and customer service.</p></div>
+      <div class="adv-card c2 reveal"><span class="adv-icon">🎯</span><h3>High Accuracy</h3><p>AI achieves remarkable precision in image recognition, medical diagnosis, and fraud detection — often surpassing human performance.</p></div>
+      <div class="adv-card c3 reveal"><span class="adv-icon">🧠</span><h3>Smart Decision Making</h3><p>AI processes massive datasets to provide data-driven insights, helping businesses and governments make smarter decisions faster.</p></div>
+      <div class="adv-card c4 reveal"><span class="adv-icon">🏥</span><h3>Healthcare Revolution</h3><p>AI detects diseases early, assists in surgeries with robotic precision, and accelerates drug discovery — saving millions of lives.</p></div>
+      <div class="adv-card c5 reveal"><span class="adv-icon">📚</span><h3>Personalized Education</h3><p>AI-powered platforms adapt to individual learning styles, creating custom study paths and instant feedback for every student.</p></div>
+      <div class="adv-card c6 reveal"><span class="adv-icon">🌍</span><h3>Climate & Environment</h3><p>AI optimizes energy usage, monitors deforestation via satellite, and helps model climate change for better environmental policies.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 📷 INSERT: Advantage Images -->
+<div style="max-width:1200px;margin:0 auto;padding:50px 60px 80px;position:relative;z-index:1;">
+  <div class="upload-banner reveal" style="background:rgba(16,185,129,0.07);border-color:rgba(16,185,129,0.25);">
+    <span class="ub-icon">✅</span>
+    <div>
+      <h3>Insert AI Advantage Images</h3>
+      <p>Show robots, hospitals, smart cities, data centers — anything that showcases AI benefits</p>
+    </div>
+  </div>
+  <div class="slot-grid two reveal" id="adv-gallery"></div>
+</div>
+
+<!-- ──────────── DISADVANTAGES ──────────── -->
+<section id="disadvantages">
+  <div class="inner">
+    <div class="sec-title reveal">⚠️ Disadvantages of AI</div>
+    <p class="sec-sub reveal">Challenges and risks we must address responsibly</p>
+    <div class="dis-grid">
+      <div class="dis-card reveal"><div class="dis-num">01</div><div class="dis-body"><h3>Job Displacement</h3><p>Automation threatens millions of jobs across manufacturing, transportation, and clerical work. Without reskilling programs, unemployment rates could rise sharply.</p></div></div>
+      <div class="dis-card reveal"><div class="dis-num">02</div><div class="dis-body"><h3>Privacy & Surveillance</h3><p>AI-powered facial recognition and data harvesting raise serious privacy concerns. Governments and corporations can monitor citizens at unprecedented scale.</p></div></div>
+      <div class="dis-card reveal"><div class="dis-num">03</div><div class="dis-body"><h3>Bias & Discrimination</h3><p>AI trained on biased data produces discriminatory results in hiring, lending, and criminal justice — reinforcing systemic inequalities at scale.</p></div></div>
+      <div class="dis-card reveal"><div class="dis-num">04</div><div class="dis-body"><h3>Lack of Emotional Intelligence</h3><p>AI lacks true empathy, creativity, and moral judgment. In sensitive situations — mental health, ethical decisions — human nuance remains irreplaceable.</p></div></div>
+      <div class="dis-card reveal"><div class="dis-num">05</div><div class="dis-body"><h3>Security Threats & Deepfakes</h3><p>AI can be weaponized to create convincing deepfakes, automate cyberattacks, and generate misinformation — posing major threats to democracy.</p></div></div>
+      <div class="dis-card reveal"><div class="dis-num">06</div><div class="dis-body"><h3>High Cost & Energy Use</h3><p>Training large AI models requires enormous computing power, contributing to carbon emissions. The cost limits access to wealthy organizations only.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 📷 INSERT: Risk/Concern Images -->
+<div style="max-width:1200px;margin:0 auto;padding:50px 60px 80px;position:relative;z-index:1;">
+  <div class="upload-banner reveal" style="background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.2);">
+    <span class="ub-icon">⚠️</span>
+    <div>
+      <h3>Insert AI Risk / Concern Images</h3>
+      <p>Add images showing surveillance cameras, job automation, deepfakes, or cybersecurity threats</p>
+    </div>
+  </div>
+  <div class="slot-grid two reveal" id="dis-gallery"></div>
+</div>
+
+<!-- ──────────── TYPES ──────────── -->
+<section id="types">
+  <div class="inner">
+    <div class="sec-title reveal">🔬 Types of AI</div>
+    <p class="sec-sub reveal">Understanding the different forms of artificial intelligence</p>
+    <div class="types-grid">
+      <div class="type-card t1 reveal"><span class="type-icon">🤖</span><h3>Narrow AI</h3><p>Designed for one specific task. Siri, Google Translate, spam filters. Most AI today falls here.</p></div>
+      <div class="type-card t2 reveal"><span class="type-icon">🧬</span><h3>General AI</h3><p>Hypothetical AI with human-level intelligence across all domains. Still a research goal.</p></div>
+      <div class="type-card t3 reveal"><span class="type-icon">🌌</span><h3>Super AI</h3><p>Theoretical AI that surpasses human intelligence in every way. Subject of intense global debate.</p></div>
+      <div class="type-card t4 reveal"><span class="type-icon">📡</span><h3>Generative AI</h3><p>Creates text, images, music, video from prompts. ChatGPT, DALL·E, Suno. Fastest-growing branch.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── USE CASES (HIGHLIGHTED IMAGES) ──────────── -->
+<section id="usecases">
+  <div class="inner">
+    <div class="sec-title reveal">🚀 AI in the Real World</div>
+    <p class="sec-sub reveal">Click any image to view full-screen · Hover for glow effect</p>
+
+    <div class="use-row reveal">
+      <div class="use-card" onclick="openLightbox(this.querySelector('img').src,'Healthcare AI')">
+        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80" alt="Healthcare">
+        <div class="ov"><h3>🏥 Healthcare</h3><p>Early cancer detection, robotic surgery, drug discovery</p></div>
+      </div>
+      <div class="use-card" onclick="openLightbox(this.querySelector('img').src,'Transportation AI')">
+        <img src="https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?w=600&q=80" alt="Transport">
+        <div class="ov"><h3>🚗 Transportation</h3><p>Self-driving cars, traffic optimization, route prediction</p></div>
+      </div>
+      <div class="use-card" onclick="openLightbox(this.querySelector('img').src,'Space Exploration AI')">
+        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&q=80" alt="Space">
+        <div class="ov"><h3>🛸 Space Exploration</h3><p>Autonomous rovers, telescope analysis, mission planning</p></div>
+      </div>
+    </div>
+
+    <div class="use-row reveal">
+      <div class="use-card" onclick="openLightbox(this.querySelector('img').src,'AI in Education')">
+        <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80" alt="Education">
+        <div class="ov"><h3>📚 Education</h3><p>Personalized learning, AI tutors, exam preparation</p></div>
+      </div>
+      <div class="use-card" onclick="openLightbox(this.querySelector('img').src,'AI in Finance')">
+        <img src="https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=600&q=80" alt="Finance">
+        <div class="ov"><h3>💰 Finance</h3><p>Fraud detection, algorithmic trading, credit scoring</p></div>
+      </div>
+      <div class="use-card" onclick="openLightbox(this.querySelector('img').src,'AI in Creative Arts')">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Creative">
+        <div class="ov"><h3>🎨 Creative Arts</h3><p>AI-generated art, music composition, video production</p></div>
+      </div>
+    </div>
+
+    <!-- 📷 INSERT: Your own use-case images -->
+    <div style="margin-top:50px;" class="reveal">
+      <div class="upload-banner" style="background:rgba(6,182,212,0.07);border-color:rgba(6,182,212,0.25);">
+        <span class="ub-icon">🚀</span>
+        <div>
+          <h3>Add Your Own Use-Case Images</h3>
+          <p>Have AI-related photos from your project or research? Insert them here to make this page yours.</p>
+        </div>
+      </div>
+      <div class="slot-grid reveal" id="usecase-gallery"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── FUTURE ──────────── -->
+<section id="future">
+  <div class="inner">
+    <div class="sec-title reveal" style="text-align:center;">🔭 The Future of AI</div>
+    <p class="sec-sub reveal" style="text-align:center;">A timeline of what's coming next in artificial intelligence</p>
+    <div class="timeline">
+      <div class="tl-item reveal"><div class="tl-dot d1">🤖</div><div class="tl-body"><div class="tl-year">2025 — Now</div><h3>Multimodal AI Everywhere</h3><p>AI models understanding text, images, audio, and video simultaneously are becoming standard tools for businesses and individuals worldwide.</p></div></div>
+      <div class="tl-item reveal"><div class="tl-dot d2">🧬</div><div class="tl-body"><div class="tl-year">2026 – 2028</div><h3>AI-Designed Medicine & Biology</h3><p>AI will design personalized medicine, predict protein structures, and help cure diseases that have stumped scientists for decades.</p></div></div>
+      <div class="tl-item reveal"><div class="tl-dot d3">🌐</div><div class="tl-body"><div class="tl-year">2029 – 2032</div><h3>Autonomous AI Agents</h3><p>AI agents will independently browse the web, write code, manage projects, and run entire workflows with minimal human supervision.</p></div></div>
+      <div class="tl-item reveal"><div class="tl-dot d4">✨</div><div class="tl-body"><div class="tl-year">2035+</div><h3>Artificial General Intelligence?</h3><p>Researchers debate whether AGI — AI with human-level cognitive ability across all domains — will arrive this decade. The race is on.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">⚡ AI World</div>
+  <p>Educational AI website · Pure HTML, CSS & JS</p>
+  <p style="color:var(--muted);font-size:0.8rem;">© 2025 AI World</p>
+</footer>
+
+<script>
+/* ══════════════════════════════
+   UPLOAD SLOT BUILDER
+══════════════════════════════ */
+function buildSlots(gridId, count) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
+  for (let i = 0; i < count; i++) {
+    const slot = document.createElement('div');
+    slot.className = 'upload-slot';
+    slot.innerHTML = `
+      <input type="file" accept="image/*">
+      <span class="u-icon">🖼️</span>
+      <div class="u-label">Click to insert image</div>
+      <div class="u-hint">JPG · PNG · WEBP · GIF</div>
+      <div class="slot-ov">
+        <button class="chg-btn">🔄 Change image</button>
+        <input class="cap-inp" type="text" placeholder="Type a caption…">
+      </div>
+    `;
+
+    const fi = slot.querySelector('input[type="file"]');
+    const ov = slot.querySelector('.slot-ov');
+    const chg = slot.querySelector('.chg-btn');
+    const cap = slot.querySelector('.cap-inp');
+
+    // click slot = open lightbox (if has image) or file picker
+    slot.addEventListener('click', (e) => {
+      if (e.target === chg || e.target === cap) return;
+      if (slot.classList.contains('has-img')) {
+        const src = slot.querySelector('.slot-img')?.src || '';
+        openLightbox(src, cap.value || '');
+      } else {
+        fi.click();
+      }
+    });
+
+    chg.addEventListener('click', (e) => { e.stopPropagation(); fi.click(); });
+    cap.addEventListener('click', (e) => e.stopPropagation());
+
+    fi.addEventListener('change', () => {
+      const file = fi.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        // clear placeholder elements
+        slot.querySelector('.u-icon')?.remove();
+        slot.querySelector('.u-label')?.remove();
+        slot.querySelector('.u-hint')?.remove();
+
+        let img = slot.querySelector('.slot-img');
+        if (!img) {
+          img = document.createElement('img');
+          img.className = 'slot-img';
+          slot.insertBefore(img, ov);
+        }
+        img.src = ev.target.result;
+        slot.classList.add('has-img');
+        showToast('✅ Image added!');
+      };
+      reader.readAsDataURL(file);
+    });
+
+    grid.appendChild(slot);
+  }
+}
+
+// Build all grids
+buildSlots('main-gallery', 6);
+buildSlots('adv-gallery', 2);
+buildSlots('dis-gallery', 2);
+buildSlots('usecase-gallery', 3);
+
+/* ══════════════════════════════
+   LIGHTBOX
+══════════════════════════════ */
+function openLightbox(src, cap) {
+  if (!src) return;
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-cap').textContent = cap || '';
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lb-close').onclick = closeLightbox;
+document.getElementById('lightbox').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeLightbox(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+/* ══════════════════════════════
+   TOAST
+══════════════════════════════ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ══════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════ */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((en, i) => {
+    if (en.isIntersecting) {
+      en.target.style.transitionDelay = (i % 4) * 0.1 + 's';
+      en.target.classList.add('visible');
+      obs.unobserve(en.target);
+    }
+  });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ══════════════════════════════
+   SMOOTH SCROLL
+══════════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const el = document.querySelector(a.getAttribute('href'));
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+/* ══════════════════════════════
+   NAV ACTIVE STATE
+══════════════════════════════ */
+const secs = document.querySelectorAll('section[id]');
+const nls = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  secs.forEach(s => { if (window.scrollY >= s.offsetTop - 200) cur = s.id; });
+  nls.forEach(l => { l.style.color = l.getAttribute('href') === '#' + cur ? '#f0eeff' : ''; });
+});
+</script>
+</body>
+</html>
